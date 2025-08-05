@@ -14,7 +14,301 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      art_services: {
+        Row: {
+          created_at: string | null
+          date: string
+          description: string | null
+          done_by: string | null
+          expenditure: number
+          frequency: Database["public"]["Enums"]["frequency_type"]
+          id: string
+          profit: number | null
+          quantity: number
+          rate: number
+          sales: number | null
+          service_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          description?: string | null
+          done_by?: string | null
+          expenditure?: number
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          profit?: number | null
+          quantity?: number
+          rate: number
+          sales?: number | null
+          service_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          description?: string | null
+          done_by?: string | null
+          expenditure?: number
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          profit?: number | null
+          quantity?: number
+          rate?: number
+          sales?: number | null
+          service_name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "art_services_done_by_fkey"
+            columns: ["done_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      embroidery: {
+        Row: {
+          created_at: string | null
+          date: string
+          done_by: string | null
+          expenditure: number
+          frequency: Database["public"]["Enums"]["frequency_type"]
+          id: string
+          job_description: string
+          profit: number | null
+          quotation: number
+          sales: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          done_by?: string | null
+          expenditure?: number
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          job_description: string
+          profit?: number | null
+          quotation: number
+          sales?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          done_by?: string | null
+          expenditure?: number
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          job_description?: string
+          profit?: number | null
+          quotation?: number
+          sales?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "embroidery_done_by_fkey"
+            columns: ["done_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gift_store: {
+        Row: {
+          category: Database["public"]["Enums"]["gift_category"]
+          created_at: string | null
+          current_stock: number
+          custom_category: string | null
+          date: string
+          frequency: Database["public"]["Enums"]["frequency_type"]
+          id: string
+          item: string
+          quantity: number
+          rate: number
+          sales: number | null
+          sold_by: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["gift_category"]
+          created_at?: string | null
+          current_stock?: number
+          custom_category?: string | null
+          date?: string
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          item: string
+          quantity?: number
+          rate: number
+          sales?: number | null
+          sold_by?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["gift_category"]
+          created_at?: string | null
+          current_stock?: number
+          custom_category?: string | null
+          date?: string
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          item?: string
+          quantity?: number
+          rate?: number
+          sales?: number | null
+          sold_by?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_store_sold_by_fkey"
+            columns: ["sold_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      machines: {
+        Row: {
+          created_at: string | null
+          date: string
+          done_by: string | null
+          frequency: Database["public"]["Enums"]["frequency_type"]
+          id: string
+          machine_name: Database["public"]["Enums"]["machine_type"]
+          quantity: number
+          rate: number
+          sales: number | null
+          service_description: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          done_by?: string | null
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          machine_name: Database["public"]["Enums"]["machine_type"]
+          quantity?: number
+          rate: number
+          sales?: number | null
+          service_description: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          done_by?: string | null
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          machine_name?: Database["public"]["Enums"]["machine_type"]
+          quantity?: number
+          rate?: number
+          sales?: number | null
+          service_description?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "machines_done_by_fkey"
+            columns: ["done_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          full_name: string
+          id: string
+          role: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          full_name: string
+          id?: string
+          role?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      stationery: {
+        Row: {
+          created_at: string | null
+          current_stock: number
+          date: string
+          description: string | null
+          frequency: Database["public"]["Enums"]["frequency_type"]
+          id: string
+          item: string
+          quantity: number
+          rate: number
+          sales: number | null
+          selling_price: number
+          sold_by: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_stock?: number
+          date?: string
+          description?: string | null
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          item: string
+          quantity?: number
+          rate: number
+          sales?: number | null
+          selling_price: number
+          sold_by?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_stock?: number
+          date?: string
+          description?: string | null
+          frequency?: Database["public"]["Enums"]["frequency_type"]
+          id?: string
+          item?: string
+          quantity?: number
+          rate?: number
+          sales?: number | null
+          selling_price?: number
+          sold_by?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stationery_sold_by_fkey"
+            columns: ["sold_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +317,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      frequency_type: "daily" | "weekly" | "monthly"
+      gift_category: "cleaning" | "kids_toys" | "birthday" | "custom"
+      machine_type: "printer" | "copier" | "scanner" | "binder" | "laminator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +446,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      frequency_type: ["daily", "weekly", "monthly"],
+      gift_category: ["cleaning", "kids_toys", "birthday", "custom"],
+      machine_type: ["printer", "copier", "scanner", "binder", "laminator"],
+    },
   },
 } as const
