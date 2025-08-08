@@ -17,11 +17,10 @@ interface GiftStoreItem {
   custom_category: string | null;
   quantity: number;
   rate: number;
-  current_stock: number;
   sales: number;
   date: string;
-  frequency: string;
 }
+
 
 interface GiftStoreModuleProps { openAddTrigger?: number }
 const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
@@ -33,8 +32,6 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
     custom_category: "",
     quantity: "",
     rate: "",
-    current_stock: "",
-    frequency: "daily",
   });
   const { toast } = useToast();
 
@@ -76,8 +73,6 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
         custom_category: formData.category === "custom" ? formData.custom_category : null,
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
-        current_stock: parseInt(formData.current_stock),
-        frequency: formData.frequency as "daily" | "weekly" | "monthly",
       },
     ]);
 
@@ -99,8 +94,6 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
         custom_category: "",
         quantity: "",
         rate: "",
-        current_stock: "",
-        frequency: "daily",
       });
       fetchItems();
     }
@@ -168,7 +161,7 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rate">Rate ($)</Label>
+                  <Label htmlFor="rate">Rate (UGX)</Label>
                   <Input
                     id="rate"
                     type="number"
@@ -177,31 +170,6 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                     onChange={(e) => setFormData({ ...formData, rate: e.target.value })}
                     required
                   />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="current_stock">Current Stock</Label>
-                  <Input
-                    id="current_stock"
-                    type="number"
-                    value={formData.current_stock}
-                    onChange={(e) => setFormData({ ...formData, current_stock: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="frequency">Frequency</Label>
-                  <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
               <Button type="submit" className="w-full">Add Item</Button>
@@ -221,40 +189,36 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                 <TableHead>Item</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Quantity</TableHead>
-                <TableHead>Rate</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Sales</TableHead>
-                <TableHead>Frequency</TableHead>
+                <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.item}</TableCell>
-                  <TableCell className="capitalize">
-                    {item.category === "custom" ? item.custom_category : item.category.replace("_", " ")}
-                  </TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>${item.rate}</TableCell>
-                  <TableCell>{item.current_stock}</TableCell>
-                  <TableCell className="font-semibold">${item.sales}</TableCell>
-                  <TableCell className="capitalize">{item.frequency}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium">{item.item}</TableCell>
+                    <TableCell className="capitalize">
+                      {item.category === "custom" ? item.custom_category : item.category.replace("_", " ")}
+                    </TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>UGX {item.rate}</TableCell>
+                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center text-muted-foreground">
                     No gift store items found. Add your first item above.
                   </TableCell>
                 </TableRow>

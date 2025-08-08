@@ -21,7 +21,6 @@ export type Database = {
           description: string | null
           done_by: string | null
           expenditure: number
-          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           profit: number | null
           quantity: number
@@ -36,7 +35,6 @@ export type Database = {
           description?: string | null
           done_by?: string | null
           expenditure?: number
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           profit?: number | null
           quantity?: number
@@ -51,7 +49,6 @@ export type Database = {
           description?: string | null
           done_by?: string | null
           expenditure?: number
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           profit?: number | null
           quantity?: number
@@ -76,7 +73,6 @@ export type Database = {
           date: string
           done_by: string | null
           expenditure: number
-          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           job_description: string
           profit: number | null
@@ -89,7 +85,6 @@ export type Database = {
           date?: string
           done_by?: string | null
           expenditure?: number
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           job_description: string
           profit?: number | null
@@ -102,7 +97,6 @@ export type Database = {
           date?: string
           done_by?: string | null
           expenditure?: number
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           job_description?: string
           profit?: number | null
@@ -124,10 +118,8 @@ export type Database = {
         Row: {
           category: Database["public"]["Enums"]["gift_category"]
           created_at: string | null
-          current_stock: number
           custom_category: string | null
           date: string
-          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           item: string
           quantity: number
@@ -139,10 +131,8 @@ export type Database = {
         Insert: {
           category?: Database["public"]["Enums"]["gift_category"]
           created_at?: string | null
-          current_stock?: number
           custom_category?: string | null
           date?: string
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           item: string
           quantity?: number
@@ -154,10 +144,8 @@ export type Database = {
         Update: {
           category?: Database["public"]["Enums"]["gift_category"]
           created_at?: string | null
-          current_stock?: number
           custom_category?: string | null
           date?: string
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           item?: string
           quantity?: number
@@ -181,7 +169,6 @@ export type Database = {
           created_at: string | null
           date: string
           done_by: string | null
-          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           machine_name: Database["public"]["Enums"]["machine_type"]
           quantity: number
@@ -194,7 +181,6 @@ export type Database = {
           created_at?: string | null
           date?: string
           done_by?: string | null
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           machine_name: Database["public"]["Enums"]["machine_type"]
           quantity?: number
@@ -207,7 +193,6 @@ export type Database = {
           created_at?: string | null
           date?: string
           done_by?: string | null
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           machine_name?: Database["public"]["Enums"]["machine_type"]
           quantity?: number
@@ -256,10 +241,8 @@ export type Database = {
       stationery: {
         Row: {
           created_at: string | null
-          current_stock: number
           date: string
           description: string | null
-          frequency: Database["public"]["Enums"]["frequency_type"]
           id: string
           item: string
           quantity: number
@@ -271,10 +254,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          current_stock?: number
           date?: string
           description?: string | null
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           item: string
           quantity?: number
@@ -286,10 +267,8 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          current_stock?: number
           date?: string
           description?: string | null
-          frequency?: Database["public"]["Enums"]["frequency_type"]
           id?: string
           item?: string
           quantity?: number
@@ -317,7 +296,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      frequency_type: "daily" | "weekly" | "monthly"
       gift_category: "cleaning" | "kids_toys" | "birthday" | "custom"
       machine_type: "printer" | "copier" | "scanner" | "binder" | "laminator"
     }
@@ -447,7 +425,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      frequency_type: ["daily", "weekly", "monthly"],
       gift_category: ["cleaning", "kids_toys", "birthday", "custom"],
       machine_type: ["printer", "copier", "scanner", "binder", "laminator"],
     },

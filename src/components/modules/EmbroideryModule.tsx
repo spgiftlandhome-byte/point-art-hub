@@ -19,8 +19,8 @@ interface EmbroideryItem {
   profit: number;
   sales: number;
   date: string;
-  frequency: string;
 }
+
 
 interface EmbroideryModuleProps { openAddTrigger?: number }
 const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
@@ -30,7 +30,6 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
     job_description: "",
     quotation: "",
     expenditure: "",
-    frequency: "daily",
   });
   const { toast } = useToast();
 
@@ -70,7 +69,6 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
         job_description: formData.job_description,
         quotation: parseFloat(formData.quotation),
         expenditure: parseFloat(formData.expenditure),
-        frequency: formData.frequency as "daily" | "weekly" | "monthly",
       },
     ]);
 
@@ -90,7 +88,6 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
         job_description: "",
         quotation: "",
         expenditure: "",
-        frequency: "daily",
       });
       fetchItems();
     }
@@ -123,7 +120,7 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="quotation">Quotation ($)</Label>
+                  <Label htmlFor="quotation">Quotation (UGX)</Label>
                   <Input
                     id="quotation"
                     type="number"
@@ -134,7 +131,7 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="expenditure">Expenditure ($)</Label>
+                  <Label htmlFor="expenditure">Expenditure (UGX)</Label>
                   <Input
                     id="expenditure"
                     type="number"
@@ -144,19 +141,6 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                     required
                   />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="frequency">Frequency</Label>
-                <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               <Button type="submit" className="w-full">Add Job</Button>
             </form>
@@ -173,38 +157,36 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Job Description</TableHead>
-                <TableHead>Quotation</TableHead>
-                <TableHead>Expenditure</TableHead>
-                <TableHead>Profit</TableHead>
-                <TableHead>Sales</TableHead>
-                <TableHead>Frequency</TableHead>
+                <TableHead>Quotation (UGX)</TableHead>
+                <TableHead>Expenditure (UGX)</TableHead>
+                <TableHead>Profit (UGX)</TableHead>
+                <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium max-w-xs truncate">{item.job_description}</TableCell>
-                  <TableCell>${item.quotation}</TableCell>
-                  <TableCell>${item.expenditure}</TableCell>
-                  <TableCell className="font-semibold text-green-600">${item.profit}</TableCell>
-                  <TableCell className="font-semibold">${item.sales}</TableCell>
-                  <TableCell className="capitalize">{item.frequency}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium max-w-xs truncate">{item.job_description}</TableCell>
+                    <TableCell>UGX {item.quotation}</TableCell>
+                    <TableCell>UGX {item.expenditure}</TableCell>
+                    <TableCell className="font-semibold text-green-600">UGX {item.profit}</TableCell>
+                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center text-muted-foreground">
                     No embroidery jobs found. Add your first job above.
                   </TableCell>
                 </TableRow>

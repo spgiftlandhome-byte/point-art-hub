@@ -21,8 +21,8 @@ interface ArtService {
   sales: number;
   profit: number;
   date: string;
-  frequency: string;
 }
+
 
 interface ArtServicesModuleProps { openAddTrigger?: number }
 const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
@@ -34,7 +34,6 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
     quantity: "",
     rate: "",
     expenditure: "",
-    frequency: "daily",
   });
   const { toast } = useToast();
 
@@ -76,7 +75,6 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
         expenditure: parseFloat(formData.expenditure),
-        frequency: formData.frequency as "daily" | "weekly" | "monthly",
       },
     ]);
 
@@ -98,7 +96,6 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
         quantity: "",
         rate: "",
         expenditure: "",
-        frequency: "daily",
       });
       fetchItems();
     }
@@ -203,40 +200,38 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                 <TableHead>Service Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Quantity</TableHead>
-                <TableHead>Rate</TableHead>
-                <TableHead>Expenditure</TableHead>
-                <TableHead>Sales</TableHead>
-                <TableHead>Profit</TableHead>
-                <TableHead>Frequency</TableHead>
+                <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Expenditure (UGX)</TableHead>
+                <TableHead>Sales (UGX)</TableHead>
+                <TableHead>Profit (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.service_name}</TableCell>
-                  <TableCell className="max-w-xs truncate">{item.description || "-"}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>${item.rate}</TableCell>
-                  <TableCell>${item.expenditure}</TableCell>
-                  <TableCell className="font-semibold">${item.sales}</TableCell>
-                  <TableCell className="font-semibold text-green-600">${item.profit}</TableCell>
-                  <TableCell className="capitalize">{item.frequency}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium">{item.service_name}</TableCell>
+                    <TableCell className="max-w-xs truncate">{item.description || "-"}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>UGX {item.rate}</TableCell>
+                    <TableCell>UGX {item.expenditure}</TableCell>
+                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell className="font-semibold text-green-600">UGX {item.profit}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center text-muted-foreground">
+                  <TableCell colSpan={8} className="text-center text-muted-foreground">
                     No art services found. Add your first service above.
                   </TableCell>
                 </TableRow>

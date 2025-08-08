@@ -16,12 +16,11 @@ interface StationeryItem {
   description: string | null;
   quantity: number;
   rate: number;
-  current_stock: number;
   selling_price: number;
   sales: number;
   date: string;
-  frequency: string;
 }
+
 
 interface StationeryModuleProps { openAddTrigger?: number }
 const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
@@ -32,9 +31,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
     description: "",
     quantity: "",
     rate: "",
-    current_stock: "",
     selling_price: "",
-    frequency: "daily",
   });
   const { toast } = useToast();
 
@@ -75,9 +72,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
         description: formData.description || null,
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
-        current_stock: parseInt(formData.current_stock),
         selling_price: parseFloat(formData.selling_price),
-        frequency: formData.frequency as "daily" | "weekly" | "monthly",
       },
     ]);
 
@@ -98,9 +93,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
         description: "",
         quantity: "",
         rate: "",
-        current_stock: "",
         selling_price: "",
-        frequency: "daily",
       });
       fetchItems();
     }
@@ -151,7 +144,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rate">Rate ($)</Label>
+                  <Label htmlFor="rate">Rate (UGX)</Label>
                   <Input
                     id="rate"
                     type="number"
@@ -162,41 +155,16 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="current_stock">Current Stock</Label>
-                  <Input
-                    id="current_stock"
-                    type="number"
-                    value={formData.current_stock}
-                    onChange={(e) => setFormData({ ...formData, current_stock: e.target.value })}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="selling_price">Selling Price ($)</Label>
-                  <Input
-                    id="selling_price"
-                    type="number"
-                    step="0.01"
-                    value={formData.selling_price}
-                    onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
               <div>
-                <Label htmlFor="frequency">Frequency</Label>
-                <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="selling_price">Selling Price (UGX)</Label>
+                <Input
+                  id="selling_price"
+                  type="number"
+                  step="0.01"
+                  value={formData.selling_price}
+                  onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })}
+                  required
+                />
               </div>
               <Button type="submit" className="w-full">Add Item</Button>
             </form>
@@ -215,11 +183,9 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                 <TableHead>Item</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Qty</TableHead>
-                <TableHead>Rate</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Selling Price</TableHead>
-                <TableHead>Sales</TableHead>
-                <TableHead>Frequency</TableHead>
+                <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Selling Price (UGX)</TableHead>
+                <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -229,11 +195,9 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                   <TableCell className="font-medium">{item.item}</TableCell>
                   <TableCell>{item.description || "-"}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
-                  <TableCell>${item.rate}</TableCell>
-                  <TableCell>{item.current_stock}</TableCell>
-                  <TableCell>${item.selling_price}</TableCell>
-                  <TableCell className="font-semibold">${item.sales}</TableCell>
-                  <TableCell className="capitalize">{item.frequency}</TableCell>
+                  <TableCell>UGX {item.rate}</TableCell>
+                  <TableCell>UGX {item.selling_price}</TableCell>
+                  <TableCell className="font-semibold">UGX {item.sales}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">
@@ -248,7 +212,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
               ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center text-muted-foreground">
+                  <TableCell colSpan={7} className="text-center text-muted-foreground">
                     No stationery items found. Add your first item above.
                   </TableCell>
                 </TableRow>

@@ -19,8 +19,8 @@ interface MachineService {
   rate: number;
   sales: number;
   date: string;
-  frequency: string;
 }
+
 
 interface MachinesModuleProps { openAddTrigger?: number }
 const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
@@ -31,7 +31,6 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
     service_description: "",
     quantity: "",
     rate: "",
-    frequency: "daily",
   });
   const { toast } = useToast();
 
@@ -72,7 +71,6 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
         service_description: formData.service_description,
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
-        frequency: formData.frequency as "daily" | "weekly" | "monthly",
       },
     ]);
 
@@ -93,7 +91,6 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
         service_description: "",
         quantity: "",
         rate: "",
-        frequency: "daily",
       });
       fetchItems();
     }
@@ -151,7 +148,7 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rate">Rate ($)</Label>
+                  <Label htmlFor="rate">Rate (UGX)</Label>
                   <Input
                     id="rate"
                     type="number"
@@ -161,19 +158,6 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                     required
                   />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="frequency">Frequency</Label>
-                <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               <Button type="submit" className="w-full">Add Service</Button>
             </form>
@@ -192,36 +176,34 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                 <TableHead>Machine</TableHead>
                 <TableHead>Service Description</TableHead>
                 <TableHead>Quantity</TableHead>
-                <TableHead>Rate</TableHead>
-                <TableHead>Sales</TableHead>
-                <TableHead>Frequency</TableHead>
+                <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium capitalize">{item.machine_name}</TableCell>
-                  <TableCell className="max-w-xs truncate">{item.service_description}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>${item.rate}</TableCell>
-                  <TableCell className="font-semibold">${item.sales}</TableCell>
-                  <TableCell className="capitalize">{item.frequency}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                {items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium capitalize">{item.machine_name}</TableCell>
+                    <TableCell className="max-w-xs truncate">{item.service_description}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>UGX {item.rate}</TableCell>
+                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center text-muted-foreground">
                     No machine services found. Add your first service above.
                   </TableCell>
                 </TableRow>
