@@ -23,7 +23,8 @@ interface StationeryItem {
   frequency: string;
 }
 
-const StationeryModule = () => {
+interface StationeryModuleProps { openAddTrigger?: number }
+const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
   const [items, setItems] = useState<StationeryItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,6 +37,13 @@ const StationeryModule = () => {
     frequency: "daily",
   });
   const { toast } = useToast();
+
+  // Open the add dialog when triggered from Dashboard
+  useEffect(() => {
+    if (openAddTrigger) {
+      setIsDialogOpen(true);
+    }
+  }, [openAddTrigger]);
 
   useEffect(() => {
     fetchItems();

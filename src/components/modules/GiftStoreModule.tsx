@@ -23,7 +23,8 @@ interface GiftStoreItem {
   frequency: string;
 }
 
-const GiftStoreModule = () => {
+interface GiftStoreModuleProps { openAddTrigger?: number }
+const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
   const [items, setItems] = useState<GiftStoreItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,6 +37,13 @@ const GiftStoreModule = () => {
     frequency: "daily",
   });
   const { toast } = useToast();
+
+  // Open the add dialog when triggered from Dashboard
+  useEffect(() => {
+    if (openAddTrigger) {
+      setIsDialogOpen(true);
+    }
+  }, [openAddTrigger]);
 
   useEffect(() => {
     fetchItems();

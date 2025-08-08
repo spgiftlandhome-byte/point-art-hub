@@ -22,7 +22,8 @@ interface MachineService {
   frequency: string;
 }
 
-const MachinesModule = () => {
+interface MachinesModuleProps { openAddTrigger?: number }
+const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
   const [items, setItems] = useState<MachineService[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,6 +34,13 @@ const MachinesModule = () => {
     frequency: "daily",
   });
   const { toast } = useToast();
+
+  // Open the add dialog when triggered from Dashboard
+  useEffect(() => {
+    if (openAddTrigger) {
+      setIsDialogOpen(true);
+    }
+  }, [openAddTrigger]);
 
   useEffect(() => {
     fetchItems();

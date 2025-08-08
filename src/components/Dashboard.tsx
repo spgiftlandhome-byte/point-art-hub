@@ -8,9 +8,18 @@ import GiftStoreModule from "./modules/GiftStoreModule";
 import EmbroideryModule from "./modules/EmbroideryModule";
 import MachinesModule from "./modules/MachinesModule";
 import ArtServicesModule from "./modules/ArtServicesModule";
-
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const { toast } = useToast();
+  const [addTriggers, setAddTriggers] = useState<Record<string, number>>({
+    stationery: 0,
+    "gift-store": 0,
+    embroidery: 0,
+    machines: 0,
+    "art-services": 0,
+  });
 
   const modules = [
     {
@@ -50,13 +59,60 @@ const Dashboard = () => {
     },
   ];
 
+  const moduleIds = ["stationery","gift-store","embroidery","machines","art-services"] as const;
+  type ModuleId = typeof moduleIds[number];
+  const tableMap: Record<ModuleId, 'stationery' | 'gift_store' | 'embroidery' | 'machines' | 'art_services'> = {
+    "stationery": "stationery",
+    "gift-store": "gift_store",
+    "embroidery": "embroidery",
+    "machines": "machines",
+    "art-services": "art_services",
+  };
+
+  const handleAddEntry = () => {
+    if (!moduleIds.includes(activeTab as ModuleId)) {
+      toast({ title: "Select a module", description: "Open a module tab first, then click Add Entry." });
+      return;
+    }
+    setAddTriggers(prev => ({ ...prev, [activeTab]: Date.now() }));
+  };
+
+  const toCSV = (rows: any[]) => {
+    if (!rows || rows.length === 0) return "";
+    const headers = Object.keys(rows[0]);
+    const escape = (val: any) => `"${String(val ?? "").replace(/"/g, '""')}"`;
+    return [headers.join(","), ...rows.map(r => headers.map(h => escape(r[h])).join(","))].join("\n");
+  };
+
+  const handleExportReport = async () => {
+    if (!moduleIds.includes(activeTab as ModuleId)) {
+      toast({ title: "Select a module", description: "Go to a module tab to export its report." });
+      return;
+    }
+    const table = tableMap[activeTab as ModuleId];
+    const { data, error } = await supabase.from(table).select("*").order("created_at", { ascending: false });
+    if (error) {
+      toast({ title: "Export failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    const csv = toCSV(data || []);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${activeTab}-report-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "Export started", description: "Your CSV report has been downloaded." });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">Inventory Dashboard</h2>
         <div className="flex gap-2">
-          <Button variant="outline">Export Report</Button>
-          <Button>
+          <Button variant="outline" onClick={handleExportReport}>Export Report</Button>
+          <Button onClick={handleAddEntry}>
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Entry
           </Button>
@@ -127,23 +183,23 @@ const Dashboard = () => {
         </TabsContent>
 
         <TabsContent value="stationery">
-          <StationeryModule />
+          <StationeryModule openAddTrigger={addTriggers["stationery"]} />
         </TabsContent>
 
         <TabsContent value="gift-store">
-          <GiftStoreModule />
+          <GiftStoreModule openAddTrigger={addTriggers["gift-store"]} />
         </TabsContent>
 
         <TabsContent value="embroidery">
-          <EmbroideryModule />
+          <EmbroideryModule openAddTrigger={addTriggers["embroidery"]} />
         </TabsContent>
 
         <TabsContent value="machines">
-          <MachinesModule />
+          <MachinesModule openAddTrigger={addTriggers["machines"]} />
         </TabsContent>
 
         <TabsContent value="art-services">
-          <ArtServicesModule />
+          <ArtServicesModule openAddTrigger={addTriggers["art-services"]} />
         </TabsContent>
       </Tabs>
     </div>

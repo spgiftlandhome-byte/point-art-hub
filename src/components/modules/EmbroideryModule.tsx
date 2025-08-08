@@ -22,7 +22,8 @@ interface EmbroideryItem {
   frequency: string;
 }
 
-const EmbroideryModule = () => {
+interface EmbroideryModuleProps { openAddTrigger?: number }
+const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
   const [items, setItems] = useState<EmbroideryItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,6 +33,13 @@ const EmbroideryModule = () => {
     frequency: "daily",
   });
   const { toast } = useToast();
+
+  // Open the add dialog when triggered from Dashboard
+  useEffect(() => {
+    if (openAddTrigger) {
+      setIsDialogOpen(true);
+    }
+  }, [openAddTrigger]);
 
   useEffect(() => {
     fetchItems();
