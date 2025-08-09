@@ -146,7 +146,7 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="rate">Rate ($)</Label>
+                  <Label htmlFor="rate">Rate (UGX)</Label>
                   <Input
                     id="rate"
                     type="number"
@@ -159,7 +159,7 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="expenditure">Expenditure ($)</Label>
+                  <Label htmlFor="expenditure">Expenditure (UGX)</Label>
                   <Input
                     id="expenditure"
                     type="number"
@@ -168,19 +168,6 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                     onChange={(e) => setFormData({ ...formData, expenditure: e.target.value })}
                     required
                   />
-                </div>
-                <div>
-                  <Label htmlFor="frequency">Frequency</Label>
-                  <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
               <Button type="submit" className="w-full">Add Service</Button>
