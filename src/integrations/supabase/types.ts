@@ -114,6 +114,45 @@ export type Database = {
           },
         ]
       }
+      gift_daily_sales: {
+        Row: {
+          bpx: number
+          code: string | null
+          created_at: string | null
+          date: string
+          id: string
+          item: string
+          quantity: number
+          spx: number
+          unit: string
+          updated_at: string | null
+        }
+        Insert: {
+          bpx: number
+          code?: string | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          item: string
+          quantity?: number
+          spx: number
+          unit?: string
+          updated_at?: string | null
+        }
+        Update: {
+          bpx?: number
+          code?: string | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          item?: string
+          quantity?: number
+          spx?: number
+          unit?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       gift_store: {
         Row: {
           category: Database["public"]["Enums"]["gift_category"]
