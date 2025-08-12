@@ -218,16 +218,20 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 {items.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium max-w-xs truncate">{item.job_description}</TableCell>
-                    <TableCell>UGX {item.quotation}</TableCell>
-                    <TableCell>UGX {item.expenditure}</TableCell>
-                    <TableCell className="font-semibold text-green-600">UGX {item.profit}</TableCell>
-                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>UGX {item.rate.toLocaleString()}</TableCell>
+                    <TableCell className="font-semibold text-green-600">UGX {item.quotation.toLocaleString()}</TableCell>
+                    <TableCell>UGX {item.deposit.toLocaleString()}</TableCell>
+                    <TableCell>UGX {item.balance.toLocaleString()}</TableCell>
+                    <TableCell>UGX {item.expenditure.toLocaleString()}</TableCell>
+                    <TableCell className="font-semibold text-green-600">UGX {item.profit.toLocaleString()}</TableCell>
+                    <TableCell className="font-semibold">UGX {item.sales.toLocaleString()}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="outline" size="sm" aria-label="Edit">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" aria-label="Delete">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -236,7 +240,7 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  <TableCell colSpan={10} className="text-center text-muted-foreground">
                     No embroidery jobs found. Add your first job above.
                   </TableCell>
                 </TableRow>
