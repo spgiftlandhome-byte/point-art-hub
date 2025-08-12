@@ -19,6 +19,8 @@ interface StationeryItem {
   selling_price: number;
   sales: number;
   date: string;
+  low_stock_threshold?: number;
+  profit_per_unit?: number;
 }
 
 
@@ -32,6 +34,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
     quantity: "",
     rate: "",
     selling_price: "",
+    low_stock_threshold: "",
   });
   const { toast } = useToast();
 
@@ -73,6 +76,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
         selling_price: parseFloat(formData.selling_price),
+        low_stock_threshold: parseInt(formData.low_stock_threshold || "0"),
       },
     ]);
 
@@ -94,6 +98,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
         quantity: "",
         rate: "",
         selling_price: "",
+        low_stock_threshold: "",
       });
       fetchItems();
     }
@@ -166,6 +171,15 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                   required
                 />
               </div>
+              <div>
+                <Label htmlFor="low_stock_threshold">Low Stock Threshold</Label>
+                <Input
+                  id="low_stock_threshold"
+                  type="number"
+                  value={formData.low_stock_threshold}
+                  onChange={(e) => setFormData({ ...formData, low_stock_threshold: e.target.value })}
+                />
+              </div>
               <Button type="submit" className="w-full">Add Item</Button>
             </form>
           </DialogContent>
@@ -185,6 +199,8 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                 <TableHead>Qty</TableHead>
                 <TableHead>Rate (UGX)</TableHead>
                 <TableHead>Selling Price (UGX)</TableHead>
+                <TableHead>Profit/Unit (UGX)</TableHead>
+                <TableHead>Low Stock Thresh</TableHead>
                 <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -197,6 +213,8 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>UGX {item.rate}</TableCell>
                   <TableCell>UGX {item.selling_price}</TableCell>
+                  <TableCell>UGX {item.profit_per_unit ?? (item.selling_price - item.rate)}</TableCell>
+                  <TableCell>{item.low_stock_threshold ?? '-'}</TableCell>
                   <TableCell className="font-semibold">UGX {item.sales}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
@@ -212,7 +230,7 @@ const StationeryModule = ({ openAddTrigger }: StationeryModuleProps) => {
               ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center text-muted-foreground">
                     No stationery items found. Add your first item above.
                   </TableCell>
                 </TableRow>

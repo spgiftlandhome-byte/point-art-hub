@@ -15,6 +15,10 @@ interface EmbroideryItem {
   id: string;
   job_description: string;
   quotation: number;
+  deposit: number;
+  balance: number;
+  quantity: number;
+  rate: number;
   expenditure: number;
   profit: number;
   sales: number;
@@ -29,6 +33,9 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
   const [formData, setFormData] = useState({
     job_description: "",
     quotation: "",
+    deposit: "",
+    quantity: "1",
+    rate: "",
     expenditure: "",
   });
   const { toast } = useToast();
@@ -68,6 +75,9 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
       {
         job_description: formData.job_description,
         quotation: parseFloat(formData.quotation),
+        deposit: parseFloat(formData.deposit || "0"),
+        quantity: parseInt(formData.quantity || "1"),
+        rate: parseFloat(formData.rate || "0"),
         expenditure: parseFloat(formData.expenditure),
       },
     ]);
@@ -87,6 +97,9 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
       setFormData({
         job_description: "",
         quotation: "",
+        deposit: "",
+        quantity: "1",
+        rate: "",
         expenditure: "",
       });
       fetchItems();
@@ -120,6 +133,29 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input
+                    id="quantity"
+                    type="number"
+                    value={formData.quantity}
+                    onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="rate">Rate (UGX)</Label>
+                  <Input
+                    id="rate"
+                    type="number"
+                    step="0.01"
+                    value={formData.rate}
+                    onChange={(e) => setFormData({ ...formData, rate: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <Label htmlFor="quotation">Quotation (UGX)</Label>
                   <Input
                     id="quotation"
@@ -131,16 +167,26 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="expenditure">Expenditure (UGX)</Label>
+                  <Label htmlFor="deposit">Deposit (UGX)</Label>
                   <Input
-                    id="expenditure"
+                    id="deposit"
                     type="number"
                     step="0.01"
-                    value={formData.expenditure}
-                    onChange={(e) => setFormData({ ...formData, expenditure: e.target.value })}
-                    required
+                    value={formData.deposit}
+                    onChange={(e) => setFormData({ ...formData, deposit: e.target.value })}
                   />
                 </div>
+              </div>
+              <div>
+                <Label htmlFor="expenditure">Expenditure (UGX)</Label>
+                <Input
+                  id="expenditure"
+                  type="number"
+                  step="0.01"
+                  value={formData.expenditure}
+                  onChange={(e) => setFormData({ ...formData, expenditure: e.target.value })}
+                  required
+                />
               </div>
               <Button type="submit" className="w-full">Add Job</Button>
             </form>
@@ -157,7 +203,11 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Job Description</TableHead>
+                <TableHead>Quantity</TableHead>
+                <TableHead>Rate (UGX)</TableHead>
                 <TableHead>Quotation (UGX)</TableHead>
+                <TableHead>Deposit (UGX)</TableHead>
+                <TableHead>Balance (UGX)</TableHead>
                 <TableHead>Expenditure (UGX)</TableHead>
                 <TableHead>Profit (UGX)</TableHead>
                 <TableHead>Sales (UGX)</TableHead>

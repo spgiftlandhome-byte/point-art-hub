@@ -19,6 +19,9 @@ interface GiftStoreItem {
   custom_category: string | null;
   quantity: number;
   rate: number;
+  selling_price?: number;
+  profit_per_unit?: number;
+  low_stock_threshold?: number;
   sales: number;
   date: string;
 }
@@ -34,6 +37,8 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
     custom_category: "",
     quantity: "",
     rate: "",
+    selling_price: "",
+    low_stock_threshold: "",
   });
   const { toast } = useToast();
 
@@ -75,6 +80,8 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
         custom_category: formData.category === "custom" ? formData.custom_category : null,
         quantity: parseInt(formData.quantity),
         rate: parseFloat(formData.rate),
+        selling_price: parseFloat(formData.selling_price || "0"),
+        low_stock_threshold: parseInt(formData.low_stock_threshold || "0"),
       },
     ]);
 
@@ -96,6 +103,8 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
         custom_category: "",
         quantity: "",
         rate: "",
+        selling_price: "",
+        low_stock_threshold: "",
       });
       fetchItems();
     }
@@ -181,6 +190,27 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                       />
                     </div>
                   </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="selling_price">Selling Price (UGX)</Label>
+                      <Input
+                        id="selling_price"
+                        type="number"
+                        step="0.01"
+                        value={formData.selling_price}
+                        onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="low_stock_threshold">Low Stock Threshold</Label>
+                      <Input
+                        id="low_stock_threshold"
+                        type="number"
+                        value={formData.low_stock_threshold}
+                        onChange={(e) => setFormData({ ...formData, low_stock_threshold: e.target.value })}
+                      />
+                    </div>
+                  </div>
                   <Button type="submit" className="w-full">Add Item</Button>
                 </form>
               </DialogContent>
@@ -199,6 +229,9 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                     <TableHead>Category</TableHead>
                     <TableHead>Quantity</TableHead>
                     <TableHead>Rate (UGX)</TableHead>
+                    <TableHead>Selling Price (UGX)</TableHead>
+                    <TableHead>Profit/Unit (UGX)</TableHead>
+                    <TableHead>Low Stock Thresh</TableHead>
                     <TableHead>Sales (UGX)</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -212,6 +245,9 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                       </TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>UGX {item.rate}</TableCell>
+                      <TableCell>UGX {item.selling_price}</TableCell>
+                      <TableCell>UGX {item.profit_per_unit ?? (((item.selling_price ?? 0) as number) - item.rate)}</TableCell>
+                      <TableCell>{item.low_stock_threshold ?? '-'}</TableCell>
                       <TableCell className="font-semibold">UGX {item.sales}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
@@ -227,7 +263,7 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                   ))}
                   {items.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center text-muted-foreground">
+                      <TableCell colSpan={9} className="text-center text-muted-foreground">
                         No gift store items found. Add your first item above.
                       </TableCell>
                     </TableRow>

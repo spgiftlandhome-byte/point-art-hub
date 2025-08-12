@@ -16,42 +16,51 @@ export type Database = {
     Tables: {
       art_services: {
         Row: {
+          balance: number | null
           created_at: string | null
           date: string
+          deposit: number
           description: string | null
           done_by: string | null
           expenditure: number
           id: string
           profit: number | null
           quantity: number
+          quotation: number
           rate: number
           sales: number | null
           service_name: string
           updated_at: string | null
         }
         Insert: {
+          balance?: number | null
           created_at?: string | null
           date?: string
+          deposit?: number
           description?: string | null
           done_by?: string | null
           expenditure?: number
           id?: string
           profit?: number | null
           quantity?: number
+          quotation?: number
           rate: number
           sales?: number | null
           service_name: string
           updated_at?: string | null
         }
         Update: {
+          balance?: number | null
           created_at?: string | null
           date?: string
+          deposit?: number
           description?: string | null
           done_by?: string | null
           expenditure?: number
           id?: string
           profit?: number | null
           quantity?: number
+          quotation?: number
           rate?: number
           sales?: number | null
           service_name?: string
@@ -69,38 +78,50 @@ export type Database = {
       }
       embroidery: {
         Row: {
+          balance: number | null
           created_at: string | null
           date: string
+          deposit: number
           done_by: string | null
           expenditure: number
           id: string
           job_description: string
           profit: number | null
+          quantity: number
           quotation: number
+          rate: number | null
           sales: number | null
           updated_at: string | null
         }
         Insert: {
+          balance?: number | null
           created_at?: string | null
           date?: string
+          deposit?: number
           done_by?: string | null
           expenditure?: number
           id?: string
           job_description: string
           profit?: number | null
+          quantity?: number
           quotation: number
+          rate?: number | null
           sales?: number | null
           updated_at?: string | null
         }
         Update: {
+          balance?: number | null
           created_at?: string | null
           date?: string
+          deposit?: number
           done_by?: string | null
           expenditure?: number
           id?: string
           job_description?: string
           profit?: number | null
+          quantity?: number
           quotation?: number
+          rate?: number | null
           sales?: number | null
           updated_at?: string | null
         }
@@ -161,9 +182,12 @@ export type Database = {
           date: string
           id: string
           item: string
+          low_stock_threshold: number
+          profit_per_unit: number | null
           quantity: number
           rate: number
           sales: number | null
+          selling_price: number | null
           sold_by: string | null
           updated_at: string | null
         }
@@ -174,9 +198,12 @@ export type Database = {
           date?: string
           id?: string
           item: string
+          low_stock_threshold?: number
+          profit_per_unit?: number | null
           quantity?: number
           rate: number
           sales?: number | null
+          selling_price?: number | null
           sold_by?: string | null
           updated_at?: string | null
         }
@@ -187,9 +214,12 @@ export type Database = {
           date?: string
           id?: string
           item?: string
+          low_stock_threshold?: number
+          profit_per_unit?: number | null
           quantity?: number
           rate?: number
           sales?: number | null
+          selling_price?: number | null
           sold_by?: string | null
           updated_at?: string | null
         }
@@ -208,6 +238,7 @@ export type Database = {
           created_at: string | null
           date: string
           done_by: string | null
+          expenditure: number
           id: string
           machine_name: Database["public"]["Enums"]["machine_type"]
           quantity: number
@@ -220,6 +251,7 @@ export type Database = {
           created_at?: string | null
           date?: string
           done_by?: string | null
+          expenditure?: number
           id?: string
           machine_name: Database["public"]["Enums"]["machine_type"]
           quantity?: number
@@ -232,6 +264,7 @@ export type Database = {
           created_at?: string | null
           date?: string
           done_by?: string | null
+          expenditure?: number
           id?: string
           machine_name?: Database["public"]["Enums"]["machine_type"]
           quantity?: number
@@ -284,6 +317,8 @@ export type Database = {
           description: string | null
           id: string
           item: string
+          low_stock_threshold: number
+          profit_per_unit: number | null
           quantity: number
           rate: number
           sales: number | null
@@ -297,6 +332,8 @@ export type Database = {
           description?: string | null
           id?: string
           item: string
+          low_stock_threshold?: number
+          profit_per_unit?: number | null
           quantity?: number
           rate: number
           sales?: number | null
@@ -310,6 +347,8 @@ export type Database = {
           description?: string | null
           id?: string
           item?: string
+          low_stock_threshold?: number
+          profit_per_unit?: number | null
           quantity?: number
           rate?: number
           sales?: number | null
