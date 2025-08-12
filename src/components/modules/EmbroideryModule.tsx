@@ -68,6 +68,15 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
     }
   };
 
+  const formatUGX = (v?: number | null) => {
+    if (v === null || v === undefined || Number.isNaN(v)) return "UGX 0";
+    try {
+      return `UGX ${Number(v).toLocaleString('en-UG')}`;
+    } catch {
+      return `UGX ${v}`;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -202,7 +211,6 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Job Description</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Rate (UGX)</TableHead>
                 <TableHead>Quotation (UGX)</TableHead>
@@ -211,23 +219,26 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 <TableHead>Expenditure (UGX)</TableHead>
                 <TableHead>Profit (UGX)</TableHead>
                 <TableHead>Sales (UGX)</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
                 {items.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium max-w-xs truncate">{item.job_description}</TableCell>
-                    <TableCell>UGX {item.quotation}</TableCell>
-                    <TableCell>UGX {item.expenditure}</TableCell>
-                    <TableCell className="font-semibold text-green-600">UGX {item.profit}</TableCell>
-                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>{formatUGX(item.rate)}</TableCell>
+                    <TableCell className="font-medium text-primary">{formatUGX(item.quotation)}</TableCell>
+                    <TableCell className="font-medium">{formatUGX(item.deposit)}</TableCell>
+                    <TableCell>{formatUGX(item.balance)}</TableCell>
+                    <TableCell>{formatUGX(item.expenditure)}</TableCell>
+                    <TableCell className="font-semibold">{formatUGX(item.profit)}</TableCell>
+                    <TableCell className="font-semibold">{formatUGX(item.sales)}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" aria-label="Edit embroidery job">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" aria-label="Delete embroidery job">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -236,7 +247,7 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center text-muted-foreground">
                     No embroidery jobs found. Add your first job above.
                   </TableCell>
                 </TableRow>
