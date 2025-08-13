@@ -11,15 +11,24 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+const formatUGX = (amount: number | null | undefined): string => {
+  if (amount === null || amount === undefined) return "UGX 0";
+  return `UGX ${amount.toLocaleString()}`;
+};
+
 interface ArtService {
   id: string;
   service_name: string;
   description: string | null;
   quantity: number;
   rate: number;
+  quotation: number;
+  deposit: number;
+  balance: number;
   expenditure: number;
   sales: number;
   profit: number;
+  done_by: string | null;
   date: string;
 }
 
@@ -188,9 +197,13 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                 <TableHead>Description</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Quotation (UGX)</TableHead>
+                <TableHead>Deposit (UGX)</TableHead>
+                <TableHead>Balance (UGX)</TableHead>
                 <TableHead>Expenditure (UGX)</TableHead>
-                <TableHead>Sales (UGX)</TableHead>
                 <TableHead>Profit (UGX)</TableHead>
+                <TableHead>Sales By</TableHead>
+                <TableHead>Date of Service</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -200,16 +213,20 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                     <TableCell className="font-medium">{item.service_name}</TableCell>
                     <TableCell className="max-w-xs truncate">{item.description || "-"}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>UGX {item.rate}</TableCell>
-                    <TableCell>UGX {item.expenditure}</TableCell>
-                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
-                    <TableCell className="font-semibold text-green-600">UGX {item.profit}</TableCell>
+                    <TableCell>{formatUGX(item.rate)}</TableCell>
+                    <TableCell className="font-semibold text-green-600">{formatUGX(item.quotation)}</TableCell>
+                    <TableCell>{formatUGX(item.deposit)}</TableCell>
+                    <TableCell>{formatUGX(item.balance)}</TableCell>
+                    <TableCell>{formatUGX(item.expenditure)}</TableCell>
+                    <TableCell className="font-semibold text-green-600">{formatUGX(item.profit)}</TableCell>
+                    <TableCell>{item.done_by || "-"}</TableCell>
+                    <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="outline" size="sm" aria-label="Edit">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" aria-label="Delete">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -218,7 +235,7 @@ const ArtServicesModule = ({ openAddTrigger }: ArtServicesModuleProps) => {
                 ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-muted-foreground">
+                  <TableCell colSpan={12} className="text-center text-muted-foreground">
                     No art services found. Add your first service above.
                   </TableCell>
                 </TableRow>

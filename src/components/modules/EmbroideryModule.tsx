@@ -27,6 +27,7 @@ interface EmbroideryItem {
   expenditure: number;
   profit: number;
   sales: number;
+  done_by: string | null;
   date: string;
 }
 
@@ -216,6 +217,8 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 <TableHead>Expenditure (UGX)</TableHead>
                 <TableHead>Profit (UGX)</TableHead>
                 <TableHead>Sales (UGX)</TableHead>
+                <TableHead>Sales By</TableHead>
+                <TableHead>Date of Service</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -231,6 +234,8 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                     <TableCell>{formatUGX(item.expenditure)}</TableCell>
                     <TableCell className="font-semibold text-green-600">{formatUGX(item.profit)}</TableCell>
                     <TableCell className="font-semibold">{formatUGX(item.sales)}</TableCell>
+                    <TableCell>{item.done_by || "-"}</TableCell>
+                    <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex gap-2 justify-end">
                         <Button variant="outline" size="sm" aria-label="Edit">
@@ -245,7 +250,7 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                 ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center text-muted-foreground">
+                  <TableCell colSpan={12} className="text-center text-muted-foreground">
                     No embroidery jobs found. Add your first job above.
                   </TableCell>
                 </TableRow>

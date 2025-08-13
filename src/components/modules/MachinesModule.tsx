@@ -11,13 +11,20 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+const formatUGX = (amount: number | null | undefined): string => {
+  if (amount === null || amount === undefined) return "UGX 0";
+  return `UGX ${amount.toLocaleString()}`;
+};
+
 interface MachineService {
   id: string;
   machine_name: string;
   service_description: string;
   quantity: number;
   rate: number;
+  expenditure: number;
   sales: number;
+  done_by: string | null;
   date: string;
 }
 
@@ -177,7 +184,10 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                 <TableHead>Service Description</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Rate (UGX)</TableHead>
+                <TableHead>Expenditure (UGX)</TableHead>
                 <TableHead>Sales (UGX)</TableHead>
+                <TableHead>Sales By</TableHead>
+                <TableHead>Date of Service</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -187,14 +197,17 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                     <TableCell className="font-medium capitalize">{item.machine_name}</TableCell>
                     <TableCell className="max-w-xs truncate">{item.service_description}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>UGX {item.rate}</TableCell>
-                    <TableCell className="font-semibold">UGX {item.sales}</TableCell>
+                    <TableCell>{formatUGX(item.rate)}</TableCell>
+                    <TableCell>{formatUGX(item.expenditure)}</TableCell>
+                    <TableCell className="font-semibold">{formatUGX(item.sales)}</TableCell>
+                    <TableCell>{item.done_by || "-"}</TableCell>
+                    <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="outline" size="sm" aria-label="Edit">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" aria-label="Delete">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -203,7 +216,7 @@ const MachinesModule = ({ openAddTrigger }: MachinesModuleProps) => {
                 ))}
               {items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center text-muted-foreground">
                     No machine services found. Add your first service above.
                   </TableCell>
                 </TableRow>

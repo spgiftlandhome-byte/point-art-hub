@@ -10,7 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { AlertTriangle } from "lucide-react";
 import GiftsDailySales from "./GiftsDailySales";
+
+const formatUGX = (amount: number | null | undefined): string => {
+  if (amount === null || amount === undefined) return "UGX 0";
+  return `UGX ${amount.toLocaleString()}`;
+};
 
 interface GiftStoreItem {
   id: string;
@@ -19,10 +25,12 @@ interface GiftStoreItem {
   custom_category: string | null;
   quantity: number;
   rate: number;
-  selling_price?: number;
-  profit_per_unit?: number;
-  low_stock_threshold?: number;
+  stock: number;
+  selling_price: number;
+  profit_per_unit: number;
+  low_stock_threshold: number;
   sales: number;
+  sold_by: string | null;
   date: string;
 }
 
@@ -229,41 +237,59 @@ const GiftStoreModule = ({ openAddTrigger }: GiftStoreModuleProps) => {
                     <TableHead>Category</TableHead>
                     <TableHead>Quantity</TableHead>
                     <TableHead>Rate (UGX)</TableHead>
+                    <TableHead>Stock (UGX)</TableHead>
                     <TableHead>Selling Price (UGX)</TableHead>
                     <TableHead>Profit/Unit (UGX)</TableHead>
-                    <TableHead>Low Stock Thresh</TableHead>
                     <TableHead>Sales (UGX)</TableHead>
+                    <TableHead>Sales By</TableHead>
+                    <TableHead>Date Sold</TableHead>
+                    <TableHead>Low Stock Alert</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {items.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.item}</TableCell>
-                      <TableCell className="capitalize">
-                        {item.category === "custom" ? item.custom_category : item.category.replace("_", " ")}
-                      </TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>UGX {item.rate}</TableCell>
-                      <TableCell>UGX {item.selling_price}</TableCell>
-                      <TableCell>UGX {item.profit_per_unit ?? (((item.selling_price ?? 0) as number) - item.rate)}</TableCell>
-                      <TableCell>{item.low_stock_threshold ?? '-'}</TableCell>
-                      <TableCell className="font-semibold">UGX {item.sales}</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {items.map((item) => {
+                    const isLowStock = item.stock <= item.low_stock_threshold;
+                    return (
+                      <TableRow key={item.id} className={isLowStock ? "bg-red-50 dark:bg-red-900/20" : ""}>
+                        <TableCell className="font-medium">{item.item}</TableCell>
+                        <TableCell className="capitalize">
+                          {item.category === "custom" ? item.custom_category : item.category.replace("_", " ")}
+                        </TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>{formatUGX(item.rate)}</TableCell>
+                        <TableCell className="font-semibold text-green-600">{formatUGX(item.stock)}</TableCell>
+                        <TableCell>{formatUGX(item.selling_price)}</TableCell>
+                        <TableCell>{formatUGX(item.profit_per_unit)}</TableCell>
+                        <TableCell className="font-semibold">{formatUGX(item.sales)}</TableCell>
+                        <TableCell>{item.sold_by || "-"}</TableCell>
+                        <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          {isLowStock ? (
+                            <div className="flex items-center gap-1 text-red-600">
+                              <AlertTriangle className="h-4 w-4" />
+                              <span className="text-xs">Low Stock</span>
+                            </div>
+                          ) : (
+                            <span className="text-green-600 text-xs">Good</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2 justify-end">
+                            <Button variant="outline" size="sm" aria-label="Edit">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" aria-label="Delete">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                   {items.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center text-muted-foreground">
+                      <TableCell colSpan={12} className="text-center text-muted-foreground">
                         No gift store items found. Add your first item above.
                       </TableCell>
                     </TableRow>
