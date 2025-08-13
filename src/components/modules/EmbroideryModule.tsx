@@ -11,6 +11,11 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+const formatUGX = (amount: number | null | undefined): string => {
+  if (amount === null || amount === undefined) return "UGX 0";
+  return `UGX ${amount.toLocaleString()}`;
+};
+
 interface EmbroideryItem {
   id: string;
   job_description: string;
@@ -219,13 +224,13 @@ const EmbroideryModule = ({ openAddTrigger }: EmbroideryModuleProps) => {
                   <TableRow key={item.id}>
                     <TableCell className="font-medium max-w-xs truncate">{item.job_description}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>UGX {item.rate.toLocaleString()}</TableCell>
-                    <TableCell className="font-semibold text-green-600">UGX {item.quotation.toLocaleString()}</TableCell>
-                    <TableCell>UGX {item.deposit.toLocaleString()}</TableCell>
-                    <TableCell>UGX {item.balance.toLocaleString()}</TableCell>
-                    <TableCell>UGX {item.expenditure.toLocaleString()}</TableCell>
-                    <TableCell className="font-semibold text-green-600">UGX {item.profit.toLocaleString()}</TableCell>
-                    <TableCell className="font-semibold">UGX {item.sales.toLocaleString()}</TableCell>
+                    <TableCell>{formatUGX(item.rate)}</TableCell>
+                    <TableCell className="font-semibold text-green-600">{formatUGX(item.quotation)}</TableCell>
+                    <TableCell>{formatUGX(item.deposit)}</TableCell>
+                    <TableCell>{formatUGX(item.balance)}</TableCell>
+                    <TableCell>{formatUGX(item.expenditure)}</TableCell>
+                    <TableCell className="font-semibold text-green-600">{formatUGX(item.profit)}</TableCell>
+                    <TableCell className="font-semibold">{formatUGX(item.sales)}</TableCell>
                     <TableCell>
                       <div className="flex gap-2 justify-end">
                         <Button variant="outline" size="sm" aria-label="Edit">
