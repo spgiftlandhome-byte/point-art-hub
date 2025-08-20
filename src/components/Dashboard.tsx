@@ -10,6 +10,7 @@ import MachinesModule from "./modules/MachinesModule";
 import ArtServicesModule from "./modules/ArtServicesModule";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();

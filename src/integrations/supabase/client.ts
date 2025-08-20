@@ -2,16 +2,69 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = "https://xkkcbquonvdkhhmopbgj.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra2NicXVvbnZka2hobW9wYmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0MDYzNDksImV4cCI6MjA2OTk4MjM0OX0.k7I1BwjW3MjDgC0rOkWSKEyLv81gw7F_nWWtjMs1WPw";
+// Supabase configuration
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://xkkcbquonvdkhhmopbgj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra2NicXVvbnZka2hobW9wYmdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0MDYzNDksImV4cCI6MjA2OTk4MjM0OX0.k7I1BwjW3MjDgC0rOkWSKEyLv81gw7F_nWWtjMs1WPw";
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
+// Create a custom storage handler
+const storage = {
+  getItem: (key: string) => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(key);
+    }
+    return null;
+  },
+  setItem: (key: string, value: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(key, value);
+    }
+  },
+  removeItem: (key: string) => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(key);
+    }
+  },
+};
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+// Create the Supabase client with custom fetch
+const createClientWithFetch = () => {
+  const fetchWithProxy = async (url: RequestInfo, options?: RequestInit) => {
+    try {
+      // First try direct fetch
+      return await fetch(url, options);
+    } catch (error) {
+      // If direct fetch fails, try bypassing proxy
+      console.warn('Direct fetch failed, trying without proxy...', error);
+      const newUrl = new URL(url.toString());
+      newUrl.searchParams.append('_t', Date.now().toString());
+      
+      const newOptions = {
+        ...options,
+        headers: {
+          ...options?.headers,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      };
+      
+      return fetch(newUrl.toString(), newOptions);
+    }
+  };
+
+  return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      storage: storage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+    global: {
+      fetch: fetchWithProxy,
+      headers: {
+        'X-Client-Info': 'point-art-hub/1.0',
+      },
+    },
+  });
+};
+
+export const supabase = createClientWithFetch();
